@@ -38,7 +38,7 @@ const SideBar = ({ element }: { element: JSX.Element }) => {
             Name: "DashBoard"
         },
         {
-            Name: "Alarm",
+            Name: "Project",
             Icon: <FaBell />,
             Children: [{
                 Path: "/AlarmCondition",
@@ -64,12 +64,7 @@ const SideBar = ({ element }: { element: JSX.Element }) => {
                     Path: "/manage-user",
                     Icon: <FaUsers />,
                     Name: "Manage User"
-                },
-                {
-                    Path: "/sites",
-                    Icon: <FaBuilding />,
-                    Name: "Sites"
-                },
+                }
             ]
         }
     ]

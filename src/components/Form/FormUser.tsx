@@ -92,7 +92,7 @@ const FormUser = ({ data, open, setOpen, getUser }: IProp) => {
             <ComboboxInput
               errors={errors.RoleId?.message}
               defaultValue={data?.RoleId}
-              name="role_id"
+              name="RoleId"
               label="Role"
               control={control}
               dataSelect={mockRoles.map((e: IRole) => {
