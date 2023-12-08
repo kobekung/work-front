@@ -2,31 +2,31 @@ import { Button, Input, InputRef, Pagination, Table, Tag } from "antd";
 import { FaEdit, FaSearch, FaTrashAlt } from "react-icons/fa";
 import { useRef, useState } from "react";
 import _ from "lodash";
-import { IUser } from "../../interfaces/user.interface";
 import { IRowReturn } from "../../interfaces/row.interface";
 import { alertConfirm, alertError, alertSuccess } from "../../utils/Alert";
 import { UserApi } from "../../services/UserAPI";
 import AddButton from "../Button/AddButton";
-import FormUser from "../Form/FormUser";
+import { ICountry } from "../../interfaces/contry.interface";
+import FormCountry from "../Form/FormCountry";
 
-const TableUser = ({
+const TableCountry = ({
   data,
-  getUser,
+  refreshTable,
   setPage,
   setRow,
   row,
 }: {
   row: number;
   setRow: React.Dispatch<React.SetStateAction<number>>;
-  data: IRowReturn<IUser>;
-  getUser: () => void;
+  data: IRowReturn<ICountry>;
+  refreshTable: () => void;
   setPage: React.Dispatch<React.SetStateAction<number>>;
 }) => {
   const [open, setOpen] = useState(false);
-  const [dataSelected, setDataSelected] = useState<IUser | null>(null);
+  const [dataSelected, setDataSelected] = useState<ICountry | null>(null);
   const searchInput = useRef<InputRef>(null);
 
-  const handleEdit = async (data: IUser) => {
+  const handleEdit = async (data: ICountry) => {
     try {
       setDataSelected(data);
       setOpen(true);
@@ -35,12 +35,12 @@ const TableUser = ({
     }
   };
 
-  const handleDelete = async (data: IUser) => {
+  const handleDelete = async (data: ICountry) => {
     try {
       const confirm = await alertConfirm("Are you sure?", "Delete");
       if (!confirm) return;
       await UserApi.Delete(data.Id!);
-      getUser();
+      refreshTable();
       alertSuccess();
     } catch (e: any) {
       alertError(e.response.data.message);
@@ -126,7 +126,7 @@ const TableUser = ({
         }
       }
     },
-    render: (text: string, record: IUser) => {
+    render: (text: string, record: ICountry) => {
       // Custom rendering logic here
       return (
         <div key={record.Id}>
@@ -157,20 +157,32 @@ const TableUser = ({
       ...getColumnSearchProps({ dataIndex: "Id", handleSearch, handleReset }),
     },
     {
-      title: "Username",
-      dataIndex: "Username",
-      key: "Username",
+      title: "Name",
+      dataIndex: "Name",
+      key: "Id",
       ...getColumnSearchProps({
-        dataIndex: "Username",
+        dataIndex: "Name",
         handleSearch,
         handleReset,
       }),
     },
     {
+      title: "Flag",
+      dataIndex: "ImgUrl",
+      key: "ImgUrl",
+      render: (_: number, row: ICountry) => {
+        return (
+          <div key={`flag-${row.Id}`}>
+            <img src={row.ImgUrl} width={100} />
+          </div>
+        );
+      },
+    },
+    {
       title: "Active",
       dataIndex: "IsActive",
       key: "IsActive",
-      render: (_: number, row: IUser) => {
+      render: (_: number, row: ICountry) => {
         return (
           <div key={`active-${row.Id}`}>
             <Tag color={row.IsActive ? "green" : "volcano"}>
@@ -184,7 +196,7 @@ const TableUser = ({
       title: "",
       dataIndex: "Id",
       key: "Id",
-      render: (_: number, data: IUser) => (
+      render: (_: number, data: ICountry) => (
         <div className="flex gap-5" key={`actions-${data.Id}`}>
           <div
             className="cursor-pointer text-xl text-amber-500"
@@ -212,7 +224,7 @@ const TableUser = ({
           pagination={false}
           dataSource={data?.data ?? []}
           columns={columns}
-          // rowKey="id"
+          rowKey="id"
         />
         <Pagination
           current={!_.isEmpty(data) ? data.currentPage : 0}
@@ -221,8 +233,8 @@ const TableUser = ({
           onChange={handleTableChange}
         />
       </div>
-      <FormUser
-        getUser={getUser}
+      <FormCountry
+        refreshTable={refreshTable}
         data={dataSelected}
         open={open}
         setOpen={setOpen}
@@ -231,4 +243,4 @@ const TableUser = ({
   );
 };
 
-export default TableUser;
+export default TableCountry;

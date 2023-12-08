@@ -1,7 +1,7 @@
 import { useState } from "react";
 import bgImg from "../assets/img/bg1.jpg";
 import { BiHide, BiShow } from "react-icons/bi";
-import myImage from "../../public/MEA_logo.png";
+import myImage from "../../public/logo.png";
 import { useNavigate } from "react-router-dom";
 import { alertError, alertSuccess } from "../utils/Alert";
 import { useForm } from "react-hook-form";
