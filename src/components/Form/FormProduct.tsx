@@ -9,15 +9,25 @@ import InputComponent from "../Input/InputComponent";
 import { IProduct } from "../../interfaces/product.interface";
 import { INPUT_TYPE_ENUM } from "../../enums/input.enum";
 import { ProductAPI } from "../../services/ProductAPI";
+import { useParams } from "react-router-dom";
+import MultipleSelect from "../Input/MultipleSelect";
+import { ICountry } from "../../interfaces/contry.interface";
 
 interface IProp {
   data: IProduct | null;
   open: boolean;
   setOpen: Dispatch<boolean>;
   refreshTable: () => void;
+  countries: ICountry[];
 }
 
-const FormProduct = ({ data, open, setOpen, refreshTable }: IProp) => {
+const FormProduct = ({
+  data,
+  open,
+  setOpen,
+  refreshTable,
+  countries,
+}: IProp) => {
   const {
     register,
     handleSubmit,
@@ -25,10 +35,11 @@ const FormProduct = ({ data, open, setOpen, refreshTable }: IProp) => {
     control,
     reset,
   } = useForm<IProduct>();
+  const { id } = useParams();
   const onSubmit = async (payload: IProduct) => {
     try {
       if (_.isEmpty(data) || _.isNil(data)) {
-        await ProductAPI.Create(payload);
+        await ProductAPI.Create({ ...payload, projectId: Number(id) });
       } else {
         console.log(data);
         await ProductAPI.Update({ ...data, ...payload });
@@ -70,12 +81,14 @@ const FormProduct = ({ data, open, setOpen, refreshTable }: IProp) => {
             <InputComponent
               label={"quantity"}
               type={INPUT_TYPE_ENUM.NUMBER}
+              defaultValue={0}
               register={{
                 ...register("quantity", { required: "Please Enter Data." }),
               }}
             />
             <InputComponent
               label={"pricePerUnit"}
+              defaultValue={0}
               type={INPUT_TYPE_ENUM.NUMBER}
               register={{
                 ...register("pricePerUnit", { required: "Please Enter Data." }),
@@ -95,6 +108,13 @@ const FormProduct = ({ data, open, setOpen, refreshTable }: IProp) => {
               render={() => (
                 <ToggleSwitch label="Active" name="status" control={control} />
               )}
+            />
+            <MultipleSelect
+              control={control}
+              options={countries.map((item) => {
+                return { value: item.id.toString(), label: item.name };
+              })}
+              name={"country"}
             />
 
             <div className="mt-4 flex justify-center">

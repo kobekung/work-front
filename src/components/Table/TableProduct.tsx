@@ -8,14 +8,17 @@ import AddButton from "../Button/AddButton";
 import { IProduct } from "../../interfaces/product.interface";
 import FormProduct from "../Form/FormProduct";
 import { ProductAPI } from "../../services/ProductAPI";
+import { ICountry } from "../../interfaces/contry.interface";
 
 const TableProduct = ({
+  countries,
   data,
   refreshTable,
   setPage,
   setRow,
   row,
 }: {
+  countries: ICountry[];
   row: number;
   setRow: React.Dispatch<React.SetStateAction<number>>;
   data: IRowReturn<IProduct>;
@@ -243,6 +246,7 @@ const TableProduct = ({
         />
       </div>
       <FormProduct
+        countries={countries}
         refreshTable={refreshTable}
         data={dataSelected}
         open={open}
