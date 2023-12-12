@@ -8,6 +8,7 @@ import ManageCountryPage from "../pages/ManageCountry";
 import ManageCountryGroupPage from "../pages/ManageCountryGroupPage";
 import ProjectPage from "../pages/ProjectPage";
 import ProductPage from "../pages/ProductPage";
+import ManageCategoryPage from "../pages/ManageCategoryPage";
 
 export const router = createBrowserRouter([
   {
@@ -30,6 +31,10 @@ export const router = createBrowserRouter([
       {
         path: "/manage-group-country",
         element: <ManageCountryGroupPage />,
+      },
+      {
+        path: "/manage-category",
+        element: <ManageCategoryPage />,
       },
       {
         path: "/manage-user",

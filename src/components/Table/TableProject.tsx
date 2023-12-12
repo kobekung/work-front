@@ -1,5 +1,5 @@
 import { Button, Input, InputRef, Pagination, Table, Tag } from "antd";
-import { FaEdit, FaSearch, FaTrashAlt } from "react-icons/fa";
+import { FaEdit, FaEye, FaSearch, FaTrashAlt } from "react-icons/fa";
 import { useRef, useState } from "react";
 import _ from "lodash";
 import { IRowReturn } from "../../interfaces/row.interface";
@@ -7,8 +7,8 @@ import { alertConfirm, alertError, alertSuccess } from "../../utils/Alert";
 import AddButton from "../Button/AddButton";
 import { IProject } from "../../interfaces/project.interface";
 import FormProject from "../Form/FormProject";
-import { CountryApi } from "../../services/CountryAPI";
 import { ProjectApi } from "../../services/ProjectAPI";
+import { useNavigate } from "react-router-dom";
 
 const TableProject = ({
   data,
@@ -26,6 +26,7 @@ const TableProject = ({
   const [open, setOpen] = useState(false);
   const [dataSelected, setDataSelected] = useState<IProject | null>(null);
   const searchInput = useRef<InputRef>(null);
+  const history = useNavigate();
 
   const handleEdit = async (data: IProject) => {
     // eslint-disable-next-line no-useless-catch
@@ -189,6 +190,12 @@ const TableProject = ({
       key: "id",
       render: (_: number, data: IProject) => (
         <div className="flex gap-5" key={`actions-${data.id}`}>
+          <div
+            className="cursor-pointer text-xl text-blue-500"
+            onClick={() => history("/product/" + data.id)}
+          >
+            <FaEye />
+          </div>
           <div
             className="cursor-pointer text-xl text-amber-500"
             onClick={() => handleEdit(data)}

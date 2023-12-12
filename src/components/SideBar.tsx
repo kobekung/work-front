@@ -2,9 +2,14 @@ import { useState } from "react";
 import myImage from "../../public/logo.png";
 import { IoMdClose, IoMdLogOut } from "react-icons/io";
 import { AiFillPieChart, AiFillSetting } from "react-icons/ai";
-import { BiHistory, BiSolidAlarm } from "react-icons/bi";
+import { BiCategoryAlt } from "react-icons/bi";
 import { Link } from "react-router-dom";
-import { FaBell, FaChevronDown, FaChevronUp, FaUsers,FaLayerGroup } from "react-icons/fa";
+import {
+  FaChevronDown,
+  FaChevronUp,
+  FaUsers,
+  FaLayerGroup,
+} from "react-icons/fa";
 import { GiFlyingFlag } from "react-icons/gi";
 import { Logout } from "../utils/Logout";
 
@@ -47,6 +52,11 @@ const SideBar = ({ element }: { element: JSX.Element }) => {
       Name: "Setting",
       Icon: <AiFillSetting />,
       Children: [
+        {
+          Path: "/manage-category",
+          Icon: <BiCategoryAlt />,
+          Name: "Category",
+        },
         {
           Path: "/manage-group-country",
           Icon: <FaLayerGroup />,
