@@ -1,7 +1,8 @@
 import { IDefault } from "./default.interface";
 
 export interface ICountry extends IDefault {
-  Id?: number;
-  Name?: string;
-  ImgUrl?: string;
+  id: number;
+  name: string;
+  code?: string;
+  imgUrl?: string;
 }

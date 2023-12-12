@@ -1,7 +1,8 @@
 export interface IDefault {
-  IsActive?: boolean
-  CreateDate?: Date
-  UpdateDate?: Date
+  status?: boolean
+  createdAt?: Date
+  updatedAt?: Date
+  deletedAt?: Date
   CreateBy?: string
   UpdateBy?: string
 }

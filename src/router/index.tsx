@@ -6,6 +6,7 @@ import ClearcachePage from "../pages/ClearcachePage";
 import ManageUserPage from "../pages/ManageUserPage";
 import ManageCountryPage from "../pages/ManageCountry";
 import ManageCountryGroupPage from "../pages/ManageCountryGroupPage";
+import ProjectPage from "../pages/ProjectPage";
 
 export const router = createBrowserRouter([
   {
@@ -17,6 +18,10 @@ export const router = createBrowserRouter([
     path: "/",
     element: <MainTemplate />,
     children: [
+      {
+        path: "/project",
+        element: <ProjectPage />,
+      },
       {
         path: "/manage-group-country",
         element: <ManageCountryGroupPage />,

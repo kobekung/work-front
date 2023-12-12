@@ -1,11 +1,11 @@
 export interface IRowReturn<T> {
-  currentPage: number;
-  totalPages: number;
-  totalCount: number;
+  page: number;
+  lastPage: number;
+  total: number;
   data: T[];
 }
 
 export interface IPagination {
   page: number;
-  size: number;
+  limit: number;
 }

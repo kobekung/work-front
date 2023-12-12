@@ -13,7 +13,7 @@ const ManageUserPage = () => {
     try {
       const result = await UserApi.GetAll({
         page: page,
-        size: row,
+        limit: row,
       });
       return setusers(result);
     } catch (e) {

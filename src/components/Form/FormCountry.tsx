@@ -46,7 +46,7 @@ const FormCountry = ({ data, open, setOpen, refreshTable }: IProp) => {
     if (data) {
       reset(data ?? {});
     } else {
-      reset({ Id: undefined });
+      reset({ id: undefined });
     }
   }, [data, setOpen]);
 
@@ -64,7 +64,7 @@ const FormCountry = ({ data, open, setOpen, refreshTable }: IProp) => {
             <InputComponent
               label={"Name"}
               register={{
-                ...register("Name", { required: "Please Enter Data." }),
+                ...register("name", { required: "Please Enter Data." }),
               }}
             />
             <div className=" flex flex-col gap-2">
@@ -72,19 +72,15 @@ const FormCountry = ({ data, open, setOpen, refreshTable }: IProp) => {
                 Image
               </label>
               <div className="flex justify-center">
-                <PreviewImage register={register("ImgUrl")} />
+                <PreviewImage register={register("imgUrl")} />
               </div>
             </div>
 
             <Controller
-              name="IsActive"
+              name="status"
               control={control}
               render={() => (
-                <ToggleSwitch
-                  label="Active"
-                  name="IsActive"
-                  control={control}
-                />
+                <ToggleSwitch label="Active" name="status" control={control} />
               )}
             />
 

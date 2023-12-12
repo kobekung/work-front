@@ -23,7 +23,7 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = ({ label, name, control, reado
             <Switch
                 disabled={readonly}
                 checked={value}
-                onChange={onChange}
+                onChange={(e)=>{ e ? onChange(1): onChange(0)}}
                 onBlur={onBlur}
                 className={`${value ? 'bg-indigo-600' : 'bg-gray-200'
                     } relative inline-flex items-center h-6 rounded-full w-11 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}

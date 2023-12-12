@@ -168,13 +168,13 @@ const TableUser = ({
     },
     {
       title: "Active",
-      dataIndex: "IsActive",
-      key: "IsActive",
+      dataIndex: "status",
+      key: "status",
       render: (_: number, row: IUser) => {
         return (
           <div key={`active-${row.Id}`}>
-            <Tag color={row.IsActive ? "green" : "volcano"}>
-              {row.IsActive ? "Connect" : "Disable"}
+            <Tag color={row.status ? "green" : "volcano"}>
+              {row.status ? "Connect" : "Disable"}
             </Tag>
           </div>
         );
@@ -215,8 +215,8 @@ const TableUser = ({
           // rowKey="id"
         />
         <Pagination
-          current={!_.isEmpty(data) ? data.currentPage : 0}
-          total={data?.totalCount ?? 0}
+          current={!_.isEmpty(data) ? data.page : 0}
+          total={data?.total ?? 0}
           pageSize={row ?? 10} // Adjust the pageSize as needed
           onChange={handleTableChange}
         />

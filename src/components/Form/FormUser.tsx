@@ -105,10 +105,10 @@ const FormUser = ({ data, open, setOpen, getUser }: IProp) => {
               })}
             />
             <Controller
-              name="IsActive"
+              name="status"
               control={control}
               render={() => (
-                <ToggleSwitch label="Active" name="IsActive" control={control} />
+                <ToggleSwitch label="Active" name="status" control={control} />
               )}
             />
 

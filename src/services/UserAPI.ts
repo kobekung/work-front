@@ -17,9 +17,9 @@ class UserApi extends Component {
 
       // return result.data;
       return {
-        currentPage: 1,
-        totalPages: 1,
-        totalCount: 2,
+        page: 1,
+        lastPage: 1,
+        total: 2,
         data: mockUsers,
       };
     } catch (error) {

@@ -8,6 +8,7 @@ import { UserApi } from "../../services/UserAPI";
 import AddButton from "../Button/AddButton";
 import { ICountry } from "../../interfaces/contry.interface";
 import FormCountry from "../Form/FormCountry";
+import { CountryApi } from "../../services/CountryAPI";
 
 const TableCountry = ({
   data,
@@ -39,7 +40,7 @@ const TableCountry = ({
     try {
       const confirm = await alertConfirm("Are you sure?", "Delete");
       if (!confirm) return;
-      await UserApi.Delete(data.Id!);
+      await CountryApi.Delete(data.id!);
       refreshTable();
       alertSuccess();
     } catch (e: any) {
@@ -129,7 +130,7 @@ const TableCountry = ({
     render: (text: string, record: ICountry) => {
       // Custom rendering logic here
       return (
-        <div key={record.Id}>
+        <div key={record.id}>
           <p className="line-clamp-1">{text}</p>
         </div>
       );
@@ -151,17 +152,17 @@ const TableCountry = ({
 
   const columns: any = [
     {
-      title: "Id",
-      dataIndex: "Id",
-      key: "Id",
-      ...getColumnSearchProps({ dataIndex: "Id", handleSearch, handleReset }),
+      title: "id",
+      dataIndex: "id",
+      key: "id",
+      ...getColumnSearchProps({ dataIndex: "id", handleSearch, handleReset }),
     },
     {
-      title: "Name",
-      dataIndex: "Name",
-      key: "Id",
+      title: "name",
+      dataIndex: "name",
+      key: "id",
       ...getColumnSearchProps({
-        dataIndex: "Name",
+        dataIndex: "name",
         handleSearch,
         handleReset,
       }),
@@ -172,21 +173,21 @@ const TableCountry = ({
       key: "ImgUrl",
       render: (_: number, row: ICountry) => {
         return (
-          <div key={`flag-${row.Id}`}>
-            <img src={row.ImgUrl} width={100} />
+          <div key={`flag-${row.id}`}>
+            <img src={row.imgUrl} width={100} />
           </div>
         );
       },
     },
     {
       title: "Active",
-      dataIndex: "IsActive",
-      key: "IsActive",
+      dataIndex: "status",
+      key: "status",
       render: (_: number, row: ICountry) => {
         return (
-          <div key={`active-${row.Id}`}>
-            <Tag color={row.IsActive ? "green" : "volcano"}>
-              {row.IsActive ? "Connect" : "Disable"}
+          <div key={`active-${row.id}`}>
+            <Tag color={row.status ? "green" : "volcano"}>
+              {row.status ? "Connect" : "Disable"}
             </Tag>
           </div>
         );
@@ -194,10 +195,10 @@ const TableCountry = ({
     },
     {
       title: "",
-      dataIndex: "Id",
-      key: "Id",
+      dataIndex: "id",
+      key: "id",
       render: (_: number, data: ICountry) => (
-        <div className="flex gap-5" key={`actions-${data.Id}`}>
+        <div className="flex gap-5" key={`actions-${data.id}`}>
           <div
             className="cursor-pointer text-xl text-amber-500"
             onClick={() => handleEdit(data)}
@@ -227,8 +228,8 @@ const TableCountry = ({
           rowKey="id"
         />
         <Pagination
-          current={!_.isEmpty(data) ? data.currentPage : 0}
-          total={data?.totalCount ?? 0}
+          current={!_.isEmpty(data) ? data.page : 0}
+          total={data?.total ?? 0}
           pageSize={row ?? 10} // Adjust the pageSize as needed
           onChange={handleTableChange}
         />

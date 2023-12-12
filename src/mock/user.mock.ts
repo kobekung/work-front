@@ -24,7 +24,7 @@ export const mockUsers: IUser[] = [
     RoleId: 1,
     CreateDate: new Date(),
     UpdateDate: new Date(),
-    IsActive: true,
+    status: true,
   },
   {
     Id: 2,
@@ -34,6 +34,6 @@ export const mockUsers: IUser[] = [
     RoleId: 2,
     CreateDate: new Date(),
     UpdateDate: new Date(),
-    IsActive: true,
+    status: true,
   },
 ];

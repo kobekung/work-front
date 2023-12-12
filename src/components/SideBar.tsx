@@ -39,20 +39,9 @@ const SideBar = ({ element }: { element: JSX.Element }) => {
       Name: "DashBoard",
     },
     {
+      Path: "/project",
+      Icon: <AiFillPieChart />,
       Name: "Project",
-      Icon: <FaBell />,
-      Children: [
-        {
-          Path: "/AlarmCondition",
-          Icon: <BiSolidAlarm />,
-          Name: "AlarmCondition",
-        },
-        {
-          Path: "/AlarmLog",
-          Icon: <BiHistory />,
-          Name: "AlarmLog",
-        },
-      ],
     },
     {
       Name: "Setting",

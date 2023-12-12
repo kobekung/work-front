@@ -9,59 +9,50 @@ class CountryApi extends Component {
     data: IPagination
   ) => {
     try {
-      // const result = await axios({
-      //   url: "/users/getAll",
-      //   method: "post",
-      //   data: data,
-      // });
+      const result = await axios({
+        url: "/country/findAll",
+        method: "get",
+        params: data,
+      });
 
-      // return result.data;
-      return {
-        currentPage: 1,
-        totalPages: 1,
-        totalCount: 2,
-        data: mockCountry,
-      };
+      return result.data;
     } catch (error) {
       throw error as Error;
     }
   };
   static Create: (data: ICountry) => Promise<ICountry> = async (data) => {
     try {
-      // const result = await axios({
-      //   url: "/users/create",
-      //   method: "post",
-      //   data: data,
-      // });
+      const result = await axios({
+        url: "/country/create",
+        method: "post",
+        data: data,
+      });
 
-      // return result.data;
-      return mockCountry[0];
+      return result.data;
     } catch (error) {
       throw error as Error;
     }
   };
   static Update: (data: ICountry) => Promise<ICountry> = async (data) => {
     try {
-      // const result = await axios({
-      //   url: "/users/update",
-      //   method: "put",
-      //   data: data,
-      // });
-
-      // return result.data;
-      return mockCountry[0];
+      const result = await axios({
+        url: "/country/update",
+        method: "put",
+        data: data,
+      });
+      return result.data;
     } catch (error) {
       throw error as Error;
     }
   };
   static Delete: (id: number) => Promise<ICountry> = async (id) => {
     try {
-      // const result = await axios({
-      //   url: "/users/" + id,
-      //   method: "delete",
-      // });
+      const result = await axios({
+        url: "/country/delete/" + id,
+        method: "delete",
+      });
 
-      // return result.data;
+      return result.data;
 
       return mockCountry[0];
     } catch (error) {
