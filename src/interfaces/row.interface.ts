@@ -6,6 +6,7 @@ export interface IRowReturn<T> {
 }
 
 export interface IPagination {
+  search?: string;
   page: number;
   limit: number;
 }
