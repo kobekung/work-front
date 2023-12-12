@@ -1,17 +1,18 @@
 import { useEffect, useState } from "react";
 import PageHeader from "../components/PageHeader";
 import { IRowReturn } from "../interfaces/row.interface";
-import { CountryApi } from "../services/CountryAPI";
-import TableCountry from "../components/Table/TableCountry";
-import { ICountry } from "../interfaces/contry.interface";
+import { IProject } from "../interfaces/project.interface";
+import { ProjectApi } from "../services/ProjectAPI";
+import TableProject from "../components/Table/TableProject";
 
 const ProjectPage = () => {
-  const [projects, setProjects] = useState<IRowReturn<ICountry> | null>();
+  const [projects, setProjects] = useState<IRowReturn<IProject> | null>();
   const [page, setPage] = useState<number>(1);
   const [row, setRow] = useState<number>(10);
-  const getProjects= async () => {
+  const getProjects = async () => {
+    // eslint-disable-next-line no-useless-catch
     try {
-      const result = await CountryApi.GetAll({
+      const result = await ProjectApi.GetAll({
         page: page,
         limit: row,
       });
@@ -27,7 +28,7 @@ const ProjectPage = () => {
   return (
     <div>
       <PageHeader Title={"Project"} subTitle={"All project"} />
-      <TableCountry
+      <TableProject
         row={row}
         setRow={setRow}
         refreshTable={getProjects}
