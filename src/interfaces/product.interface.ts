@@ -9,6 +9,7 @@ export interface IProduct extends IDefault {
   pricePerUnit?: number;
   quantity?: number;
   remark?: string;
+  countryIds?: number[];
 
   project?: IProject;
   productCountry?: IProductCountry[];

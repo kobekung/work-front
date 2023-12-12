@@ -114,7 +114,7 @@ const FormProduct = ({
               options={countries.map((item) => {
                 return { value: item.id.toString(), label: item.name };
               })}
-              name={"country"}
+              name={"countryIds"}
             />
 
             <div className="mt-4 flex justify-center">
