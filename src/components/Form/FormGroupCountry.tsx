@@ -1,4 +1,4 @@
-import { Dispatch, useEffect, useState } from "react";
+import { Dispatch, useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 
 import _ from "lodash";
@@ -6,45 +6,33 @@ import { alertError, alertSuccess } from "../../utils/Alert";
 import CustomDialog from "../Dialog/CustomDialog";
 import ToggleSwitch from "../Input/ToggleSwitch";
 import InputComponent from "../Input/InputComponent";
-import { ICountry } from "../../interfaces/contry.interface";
-import { CountryApi } from "../../services/CountryAPI";
-import PreviewImage from "../Input/PreviewImage";
-import ComboboxInput from "../Input/ComboboxInput";
+
 import { ICountryGroup } from "../../interfaces/groupContry.interface";
 import { GroupCountryApi } from "../../services/GroupCountryAPI ";
 
 interface IProp {
-  data: ICountry | null;
+  data: ICountryGroup | null;
   open: boolean;
   setOpen: Dispatch<boolean>;
   refreshTable: () => void;
 }
 
-const FormCountry = ({ data, open, setOpen, refreshTable }: IProp) => {
+const FormGroupCountry = ({ data, open, setOpen, refreshTable }: IProp) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
     control,
     reset,
-  } = useForm<ICountry>();
-  const [groups, setGroups] = useState<ICountryGroup[]>([]);
-
-  const getCountryGroup = async () => {
-    const result = await GroupCountryApi.GetAll({
-      limit: 100,
-      page: 1,
-    });
-    setGroups(result.data);
-  };
-
-  const onSubmit = async (payload: ICountry) => {
+  } = useForm<ICountryGroup>();
+  const onSubmit = async (payload: ICountryGroup) => {
+    console.log(payload);
     try {
       if (_.isEmpty(data) || _.isNil(data)) {
-        await CountryApi.Create(payload);
+        await GroupCountryApi.Create(payload);
       } else {
         console.log(data);
-        await CountryApi.Update({ ...data, ...payload });
+        await GroupCountryApi.Update({ ...data, ...payload });
       }
       setOpen(false);
       refreshTable();
@@ -63,10 +51,6 @@ const FormCountry = ({ data, open, setOpen, refreshTable }: IProp) => {
     }
   }, [data, setOpen]);
 
-  useEffect(() => {
-    getCountryGroup();
-  }, []);
-
   return (
     <div>
       <CustomDialog
@@ -74,7 +58,7 @@ const FormCountry = ({ data, open, setOpen, refreshTable }: IProp) => {
         onClose={() => {
           setOpen(false);
         }}
-        title={"Country"}
+        title={"Group Country"}
       >
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col gap-3">
@@ -83,31 +67,6 @@ const FormCountry = ({ data, open, setOpen, refreshTable }: IProp) => {
               register={{
                 ...register("name", { required: "Please Enter Data." }),
               }}
-            />
-            <div className=" flex flex-col gap-2">
-              <label className="block text-sm font-medium text-gray-700">
-                Image
-              </label>
-              <div className="flex justify-center">
-                <PreviewImage register={register("imgUrl")} />
-              </div>
-            </div>
-
-            <ComboboxInput
-              errors={errors.groupId?.message}
-              defaultValue={data?.groupId}
-              name="groupId"
-              label="Country Group"
-              required={false}
-              control={control}
-              dataSelect={groups.map((e: ICountryGroup) => {
-                return {
-                  id: e.id,
-                  name: e.name,
-                  value: e.id,
-                  unavailable: false,
-                };
-              })}
             />
 
             <Controller
@@ -133,4 +92,4 @@ const FormCountry = ({ data, open, setOpen, refreshTable }: IProp) => {
   );
 };
 
-export default FormCountry;
+export default FormGroupCountry;

@@ -9,61 +9,52 @@ class UserApi extends Component {
     data: IPagination
   ) => {
     try {
-      // const result = await axios({
-      //   url: "/users/getAll",
-      //   method: "post",
-      //   data: data,
-      // });
+      const result = await axios({
+        url: "/user/findAll",
+        method: "post",
+        data: data,
+      });
 
-      // return result.data;
-      return {
-        page: 1,
-        lastPage: 1,
-        total: 2,
-        data: mockUsers,
-      };
+      return result.data;
     } catch (error) {
       throw error as Error;
     }
   };
+
   static Create: (data: IUser) => Promise<IUser> = async (data) => {
     try {
-      // const result = await axios({
-      //   url: "/users/create",
-      //   method: "post",
-      //   data: data,
-      // });
+      const result = await axios({
+        url: "/user/create",
+        method: "post",
+        data: data,
+      });
 
-      // return result.data;
-      return mockUsers[0];
+      return result.data;
     } catch (error) {
       throw error as Error;
     }
   };
   static Update: (data: IUser) => Promise<IUser> = async (data) => {
     try {
-      // const result = await axios({
-      //   url: "/users/update",
-      //   method: "put",
-      //   data: data,
-      // });
+      const result = await axios({
+        url: "/user/update",
+        method: "put",
+        data: data,
+      });
 
-      // return result.data;
-      return mockUsers[0];
+      return result.data;
     } catch (error) {
       throw error as Error;
     }
   };
   static Delete: (id: number) => Promise<IUser> = async (id) => {
     try {
-      // const result = await axios({
-      //   url: "/users/" + id,
-      //   method: "delete",
-      // });
+      const result = await axios({
+        url: "/user/" + id,
+        method: "delete",
+      });
 
-      // return result.data;
-
-      return mockUsers[0];
+      return result.data;
     } catch (error) {
       throw error as Error;
     }

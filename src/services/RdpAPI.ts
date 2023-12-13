@@ -1,13 +1,12 @@
 import axios from "axios";
 import { Component } from "react";
-import { ILogin } from "../pages/LoginPage";
 
-class AuthenApi extends Component {
-  static Login = async (data: ILogin) => {
+class UserApi extends Component {
+  static Search: (data: string) => Promise<any> = async (data: string) => {
     try {
       const result = await axios({
-        url: "/auth/login",
-        method: "post",
+        url: "/rdp/search-person-by-name",
+        method: "get",
         data: data,
       });
 
@@ -18,4 +17,4 @@ class AuthenApi extends Component {
   };
 }
 
-export { AuthenApi };
+export { UserApi };

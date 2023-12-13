@@ -1,7 +1,7 @@
-import { Dispatch, useEffect } from "react";
+import { Dispatch, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 
-import _ from "lodash";
+import _, { set } from "lodash";
 import { IRole, IUser } from "../../interfaces/user.interface";
 import { UserApi } from "../../services/UserAPI";
 import { alertError, alertSuccess } from "../../utils/Alert";
@@ -11,7 +11,7 @@ import { mockRoles } from "../../mock/user.mock";
 import ToggleSwitch from "../Input/ToggleSwitch";
 import ComboboxInput from "../Input/ComboboxInput";
 import InputComponent from "../Input/InputComponent";
-
+import ComboboxBase from "../Input/ComboboxBase";
 
 interface IProp {
   data: IUser | null;
@@ -21,20 +21,22 @@ interface IProp {
 }
 
 const FormUser = ({ data, open, setOpen, getUser }: IProp) => {
+  const [search, setSearch] = useState<string>("");
+  const [users, setUsers] = useState<any[]>([]);
   const {
     register,
     handleSubmit,
     formState: { errors },
     control,
     reset,
-  } = useForm<IUser>();
-  const onSubmit = async (payload: IUser) => {
+  } = useForm<{ username: string; roleId: number }>();
+  const onSubmit = async (payload: { username: string; roleId: number }) => {
     try {
-      if (_.isEmpty(data) || _.isNil(data)) {
-        await UserApi.Create(payload);
-      } else {
-        await UserApi.Update({ ...data, ...payload });
-      }
+      // if (_.isEmpty(data) || _.isNil(data)) {
+      //   await UserApi.Create(payload);
+      // } else {
+      //   await UserApi.Update({ ...data, ...payload });
+      // }
       setOpen(false);
       getUser();
       alertSuccess();
@@ -44,14 +46,28 @@ const FormUser = ({ data, open, setOpen, getUser }: IProp) => {
     }
   };
 
+  const searchUser = async () => {
+    try {
+      const result = await UserApi.GetAll({
+        limit: 100,
+        page: 1,
+        search: search,
+      });
+      setUsers(result.data);
+    } catch (e) {
+      throw e;
+    }
+  };
 
   useEffect(() => {
     if (data) {
       reset(data ?? {});
     } else {
-      reset({ Id: undefined });
+      reset({ username: undefined });
     }
   }, [data, setOpen]);
+
+  useEffect(() => {}, [search]);
 
   return (
     <div>
@@ -64,35 +80,31 @@ const FormUser = ({ data, open, setOpen, getUser }: IProp) => {
       >
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col gap-2">
-            {data?.Id && (
-              <InputComponent
-                label={"id"}
-                register={{
-                  ...register("Id", { required: "Please Enter Data." }),
-                }}
-                readonly={true}
-              />
-            )}
-            <InputComponent
-              label={"Username"}
-              register={{
-                ...register("Username", { required: "Please Enter Data." }),
+            <Controller
+              name={"username"}
+              rules={{ required: "please select data" }}
+              control={control}
+              render={({ field: { onChange, value } }) => {
+                return (
+                  <ComboboxBase
+                    onSearchChange={(e) => {
+                      setSearch(e);
+                    }}
+                    disable={false}
+                    dataset={users ?? []}
+                    defaultValue={value}
+                    onChange={(e) => {
+                      console.log(e);
+                    }}
+                  />
+                );
               }}
             />
-            {_.isEmpty(data) && (
-              <InputComponent
-                label={"Password"}
-                type={INPUT_TYPE_ENUM.PASSWORD}
-                register={{
-                  ...register("Password", { required: "Please Enter Data." }),
-                }}
-              />
-            )}
 
             <ComboboxInput
-              errors={errors.RoleId?.message}
-              defaultValue={data?.RoleId}
-              name="RoleId"
+              errors={errors.roleId?.message}
+              defaultValue={data?.roleId}
+              name="roleId"
               label="Role"
               control={control}
               dataSelect={mockRoles.map((e: IRole) => {
@@ -103,13 +115,6 @@ const FormUser = ({ data, open, setOpen, getUser }: IProp) => {
                   unavailable: false,
                 };
               })}
-            />
-            <Controller
-              name="status"
-              control={control}
-              render={() => (
-                <ToggleSwitch label="Active" name="status" control={control} />
-              )}
             />
 
             <div className="mt-4 flex justify-center">

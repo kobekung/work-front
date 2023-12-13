@@ -5,14 +5,11 @@ import NotFoundPage from "../pages/NotFoundPage";
 import ClearcachePage from "../pages/ClearcachePage";
 import ManageUserPage from "../pages/ManageUserPage";
 import ManageCountryPage from "../pages/ManageCountry";
-import ManageCountryGroupPage from "../pages/ManageCountryGroupPage";
 import ProjectPage from "../pages/ProjectPage";
 import ProductPage from "../pages/ProductPage";
-<<<<<<< Updated upstream
 import ManageCategoryPage from "../pages/ManageCategoryPage";
-=======
 import DashboardPage from "../pages/DashboardPage";
->>>>>>> Stashed changes
+import ManageGroupCountryPage from "../pages/ManageGroupCountry";
 
 export const router = createBrowserRouter([
   {
@@ -38,7 +35,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/manage-group-country",
-        element: <ManageCountryGroupPage />,
+        element: <ManageGroupCountryPage />,
       },
       {
         path: "/manage-category",

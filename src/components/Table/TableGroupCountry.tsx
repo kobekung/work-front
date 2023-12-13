@@ -6,11 +6,11 @@ import { IRowReturn } from "../../interfaces/row.interface";
 import { alertConfirm, alertError, alertSuccess } from "../../utils/Alert";
 import { UserApi } from "../../services/UserAPI";
 import AddButton from "../Button/AddButton";
-import { ICountry } from "../../interfaces/contry.interface";
-import FormCountry from "../Form/FormCountry";
-import { CountryApi } from "../../services/CountryAPI";
+import FormGroupCountry from "../Form/FormGroupCountry";
+import { ICountryGroup } from "../../interfaces/groupContry.interface";
+import { GroupCountryApi } from "../../services/GroupCountryAPI ";
 
-const TableCountry = ({
+const TableGroupCountry = ({
   data,
   refreshTable,
   setPage,
@@ -19,15 +19,15 @@ const TableCountry = ({
 }: {
   row: number;
   setRow: React.Dispatch<React.SetStateAction<number>>;
-  data: IRowReturn<ICountry>;
+  data: IRowReturn<ICountryGroup>;
   refreshTable: () => void;
   setPage: React.Dispatch<React.SetStateAction<number>>;
 }) => {
   const [open, setOpen] = useState(false);
-  const [dataSelected, setDataSelected] = useState<ICountry | null>(null);
+  const [dataSelected, setDataSelected] = useState<ICountryGroup | null>(null);
   const searchInput = useRef<InputRef>(null);
 
-  const handleEdit = async (data: ICountry) => {
+  const handleEdit = async (data: ICountryGroup) => {
     try {
       setDataSelected(data);
       setOpen(true);
@@ -36,11 +36,11 @@ const TableCountry = ({
     }
   };
 
-  const handleDelete = async (data: ICountry) => {
+  const handleDelete = async (data: ICountryGroup) => {
     try {
       const confirm = await alertConfirm("Are you sure?", "Delete");
       if (!confirm) return;
-      await CountryApi.Delete(data.id!);
+      await GroupCountryApi.Delete(data.id!);
       refreshTable();
       alertSuccess();
     } catch (e: any) {
@@ -127,7 +127,7 @@ const TableCountry = ({
         }
       }
     },
-    render: (text: string, record: ICountry) => {
+    render: (text: string, record: ICountryGroup) => {
       // Custom rendering logic here
       return (
         <div key={record.id}>
@@ -168,37 +168,15 @@ const TableCountry = ({
       }),
     },
     {
-      title: "Flag",
-      dataIndex: "ImgUrl",
-      key: "ImgUrl",
-      render: (_: number, row: ICountry) => {
-        return (
-          <div key={`flag-${row.id}`}>
-            <img src={row.imgUrl} width={100} />
-          </div>
-        );
-      },
-    },
-    {
-      title: "Group",
-      dataIndex: "ImgUrl",
-      key: "ImgUrl",
-      render: (_: number, row: ICountry) => {
-        return (
-          <div key={`flag-${row.id}`}>
-            <img src={row.imgUrl} width={100} />
-          </div>
-        );
-      },
-    },
-    {
       title: "Active",
-      dataIndex: "id",
-      key: "id",
-      render: (_: number, row: ICountry) => {
+      dataIndex: "status",
+      key: "status",
+      render: (_: number, row: ICountryGroup) => {
         return (
           <div key={`active-${row.id}`}>
-            <p>{row.countryGroup?.name}</p>
+            <Tag color={row.status ? "green" : "volcano"}>
+              {row.status ? "Connect" : "Disable"}
+            </Tag>
           </div>
         );
       },
@@ -207,7 +185,7 @@ const TableCountry = ({
       title: "",
       dataIndex: "id",
       key: "id",
-      render: (_: number, data: ICountry) => (
+      render: (_: number, data: ICountryGroup) => (
         <div className="flex gap-5" key={`actions-${data.id}`}>
           <div
             className="cursor-pointer text-xl text-amber-500"
@@ -244,7 +222,7 @@ const TableCountry = ({
           onChange={handleTableChange}
         />
       </div>
-      <FormCountry
+      <FormGroupCountry
         refreshTable={refreshTable}
         data={dataSelected}
         open={open}
@@ -254,4 +232,4 @@ const TableCountry = ({
   );
 };
 
-export default TableCountry;
+export default TableGroupCountry;

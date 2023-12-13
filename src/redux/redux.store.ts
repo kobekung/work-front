@@ -2,9 +2,11 @@ import { configureStore } from "@reduxjs/toolkit";
 import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import { STATE } from "../enums/state.enum";
+import { IUser } from "../interfaces/user.interface";
 
 export interface initialState {
   token?: any;
+  user?: IUser;
 }
 
 const persistConfig = {
@@ -18,6 +20,8 @@ const changedState = (
 ) => {
   switch (type) {
     case STATE.SETTOKEN:
+      return { ...state, ...rest };
+    case STATE.SETUSER:
       return { ...state, ...rest };
     default:
       return state;

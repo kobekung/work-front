@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 import { alertError, alertSuccess } from "../utils/Alert";
 import { useForm } from "react-hook-form";
 import { AuthenApi } from "../services/AuthenAPI";
+import { useDispatch } from "react-redux";
+import { STATE } from "../enums/state.enum";
 
 export interface ILogin {
   username: string;
@@ -19,12 +21,15 @@ const LoginPage = () => {
     formState: { errors },
   } = useForm<ILogin>();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const onSubmit = async (data: ILogin) => {
     try {
       const result = await AuthenApi.Login(data);
-      await localStorage.setItem("token", result.token);
+      console.log(result);
+      dispatch({ type: STATE.SETUSER, user: result });
+
       alertSuccess();
-      navigate("/manage-user", { replace: true });
+      navigate("/dashboard", { replace: true });
     } catch (e: any) {
       alertError(e.response.data.message);
       throw e;
