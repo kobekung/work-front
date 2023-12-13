@@ -169,6 +169,18 @@ const TableProduct = ({
         handleReset,
       }),
     },
+    {
+      title: "Category",
+      dataIndex: "category.name",
+      key: "id",
+      render: (_: number, row: IProduct) => {
+        return (
+          <div key={`active-${row.id}`}>
+            <p>{row.category?.name}</p>
+          </div>
+        );
+      },
+    },
 
     {
       title: "Quantity",

@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Control, useController } from "react-hook-form";
 import Select from "react-select";
 
@@ -28,6 +29,11 @@ const MultipleSelect = ({
           const filter = e.map((item: IOption) => Number(item.value));
           onChange(filter);
         }}
+        defaultValue={
+          value
+            ? options.filter((item) => value.includes(Number(item.value)))
+            : []
+        }
         isMulti
         className="basic-multi-select"
         classNamePrefix="select"

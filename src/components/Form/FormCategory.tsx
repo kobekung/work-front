@@ -7,8 +7,8 @@ import CustomDialog from "../Dialog/CustomDialog";
 import ToggleSwitch from "../Input/ToggleSwitch";
 import InputComponent from "../Input/InputComponent";
 import { CountryApi } from "../../services/CountryAPI";
-import PreviewImage from "../Input/PreviewImage";
 import { ICategory } from "../../interfaces/category.interface";
+import { CategoryApi } from "../../services/Category.API";
 
 interface IProp {
   data: ICategory | null;
@@ -28,10 +28,10 @@ const FormCategory = ({ data, open, setOpen, refreshTable }: IProp) => {
   const onSubmit = async (payload: ICategory) => {
     try {
       if (_.isEmpty(data) || _.isNil(data)) {
-        await CountryApi.Create(payload);
+        await CategoryApi.Create(payload);
       } else {
         console.log(data);
-        await CountryApi.Update({ ...data, ...payload });
+        await CategoryApi.Update({ ...data, ...payload });
       }
       setOpen(false);
       refreshTable();
@@ -57,7 +57,7 @@ const FormCategory = ({ data, open, setOpen, refreshTable }: IProp) => {
         onClose={() => {
           setOpen(false);
         }}
-        title={"Country"}
+        title={"Category"}
       >
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col gap-3">
@@ -65,6 +65,12 @@ const FormCategory = ({ data, open, setOpen, refreshTable }: IProp) => {
               label={"Name"}
               register={{
                 ...register("name", { required: "Please Enter Data." }),
+              }}
+            />
+            <InputComponent
+              label={"Description"}
+              register={{
+                ...register("description", { required: "Please Enter Data." }),
               }}
             />
             <Controller

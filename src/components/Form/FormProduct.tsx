@@ -1,4 +1,4 @@
-import { Dispatch, useEffect } from "react";
+import { Dispatch, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 
 import _ from "lodash";
@@ -12,6 +12,9 @@ import { ProductAPI } from "../../services/ProductAPI";
 import { useParams } from "react-router-dom";
 import MultipleSelect from "../Input/MultipleSelect";
 import { ICountry } from "../../interfaces/contry.interface";
+import ComboboxInput from "../Input/ComboboxInput";
+import { CategoryApi } from "../../services/Category.API";
+import { ICategory } from "../../interfaces/category.interface";
 
 interface IProp {
   data: IProduct | null;
@@ -33,9 +36,11 @@ const FormProduct = ({
     handleSubmit,
     formState: { errors },
     control,
+    setValue,
     reset,
   } = useForm<IProduct>();
   const { id } = useParams();
+  const [categories, setCategories] = useState<ICategory[]>([]);
   const onSubmit = async (payload: IProduct) => {
     try {
       if (_.isEmpty(data) || _.isNil(data)) {
@@ -53,13 +58,28 @@ const FormProduct = ({
     }
   };
 
+  const getCategory = async () => {
+    const result = await CategoryApi.GetAll({
+      limit: 100,
+      page: 1,
+    });
+    setCategories(result.data);
+  };
+
   useEffect(() => {
     if (data) {
-      reset(data ?? {});
+      reset({ ...data } ?? {});
+      setValue(
+        "countryIds",
+        data!.productCountry!.map((item) => item.countryId)
+      );
     } else {
       reset({ id: undefined });
     }
   }, [data, setOpen]);
+  useEffect(() => {
+    getCategory();
+  }, []);
 
   return (
     <div>
@@ -77,6 +97,21 @@ const FormProduct = ({
               register={{
                 ...register("name", { required: "Please Enter Data." }),
               }}
+            />
+            <ComboboxInput
+              errors={errors.categoryId?.message}
+              defaultValue={data?.categoryId}
+              name="categoryId"
+              label="Category"
+              control={control}
+              dataSelect={categories.map((e: ICategory) => {
+                return {
+                  id: e.id,
+                  name: e.name,
+                  value: e.id,
+                  unavailable: false,
+                };
+              })}
             />
             <InputComponent
               label={"quantity"}
@@ -109,13 +144,16 @@ const FormProduct = ({
                 <ToggleSwitch label="Active" name="status" control={control} />
               )}
             />
-            <MultipleSelect
-              control={control}
-              options={countries.map((item) => {
-                return { value: item.id.toString(), label: item.name };
-              })}
-              name={"countryIds"}
-            />
+            <div className="flex flex-col gap-2">
+              <p className="font-semibold">Country</p>
+              <MultipleSelect
+                control={control}
+                options={countries.map((item) => {
+                  return { value: item.id.toString(), label: item.name };
+                })}
+                name={"countryIds"}
+              />
+            </div>
 
             <div className="mt-4 flex justify-center">
               <button

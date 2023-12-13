@@ -1,15 +1,23 @@
 import { useForm } from "react-hook-form";
 import { IProduct } from "../../interfaces/product.interface";
 import InputComponent from "../Input/InputComponent";
-import { Dispatch } from "react";
+import { Dispatch, useEffect, useState } from "react";
+import { ICategory } from "../../interfaces/category.interface";
+import { CategoryApi } from "../../services/Category.API";
+import ComboboxInput from "../Input/ComboboxInput";
 
 const SearchProduct = ({ setSearch }: { setSearch: Dispatch<IProduct> }) => {
-  const {
-    register,
-    handleSubmit,
-    control,
-    reset,
-  } = useForm<IProduct>();
+  const { register, handleSubmit, control, reset } = useForm<IProduct>();
+  const [categories, setCategories] = useState<ICategory[]>([]);
+
+  const getCategory = async () => {
+    const result = await CategoryApi.GetAll({
+      limit: 100,
+      page: 1,
+    });
+    setCategories(result.data);
+  };
+
   const onSubmit = async (payload: IProduct) => {
     try {
       setSearch(payload);
@@ -17,6 +25,10 @@ const SearchProduct = ({ setSearch }: { setSearch: Dispatch<IProduct> }) => {
       throw e;
     }
   };
+
+  useEffect(() => {
+    getCategory();
+  }, []);
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit)} className="flex">
@@ -26,6 +38,20 @@ const SearchProduct = ({ setSearch }: { setSearch: Dispatch<IProduct> }) => {
             register={{
               ...register("name"),
             }}
+          />
+          <ComboboxInput
+            name="categoryId"
+            required={false}
+            label="Category"
+            control={control}
+            dataSelect={categories.map((e: ICategory) => {
+              return {
+                id: e.id,
+                name: e.name,
+                value: e.id,
+                unavailable: false,
+              };
+            })}
           />
           <div className=" flex justify-center items-end">
             <button

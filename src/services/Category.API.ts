@@ -9,7 +9,7 @@ class CategoryApi extends Component {
   ) => {
     try {
       const result = await axios({
-        url: "/category/findAll",
+        url: "/product-category/findAll",
         method: "get",
         params: data,
       });
@@ -22,7 +22,7 @@ class CategoryApi extends Component {
   static Create: (data: ICategory) => Promise<ICategory> = async (data) => {
     try {
       const result = await axios({
-        url: "/category/create",
+        url: "/product-category/create",
         method: "post",
         data: data,
       });
@@ -35,7 +35,7 @@ class CategoryApi extends Component {
   static Update: (data: ICategory) => Promise<ICategory> = async (data) => {
     try {
       const result = await axios({
-        url: "/category/update",
+        url: "/product-category/update",
         method: "put",
         data: data,
       });
@@ -47,7 +47,7 @@ class CategoryApi extends Component {
   static Delete: (id: number) => Promise<ICategory> = async (id) => {
     try {
       const result = await axios({
-        url: "/category/delete/" + id,
+        url: "/product-category/delete/" + id,
         method: "delete",
       });
 

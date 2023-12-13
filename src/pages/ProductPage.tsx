@@ -20,7 +20,9 @@ const ProductPage = () => {
   const getProducts = async () => {
     try {
       const result = await ProductAPI.GetAll({
-        search: `projectId:${id};name:${search?.name ?? ""};`,
+        search: `projectId:${id};name:${search?.name ?? ""};categoryId:${
+          search?.categoryId ?? ""
+        };`,
         page: page,
         limit: row,
       });
