@@ -55,7 +55,7 @@ const LoginPage = () => {
             <div className="flex items-center mb-5 justify-center">
               <img src={myImage} className="h-10 md:h-20 mr-3" />
               <p className="self-center text-3xl md:text-4xl font-semibold whitespace-nowrap">
-                CEP
+              J6 proposal 
               </p>
             </div>
             <h2 className="text-2xl font-semibold mb-6 text-center">Login</h2>

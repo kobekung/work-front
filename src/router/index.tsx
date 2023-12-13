@@ -10,6 +10,8 @@ import ProductPage from "../pages/ProductPage";
 import ManageCategoryPage from "../pages/ManageCategoryPage";
 import DashboardPage from "../pages/DashboardPage";
 import ManageGroupCountryPage from "../pages/ManageGroupCountry";
+import AuthRole from "../components/AuthRole";
+import AuthUnit from "../components/AuthUnit";
 
 export const router = createBrowserRouter([
   {
@@ -35,19 +37,35 @@ export const router = createBrowserRouter([
       },
       {
         path: "/manage-group-country",
-        element: <ManageGroupCountryPage />,
+        element: (
+          <AuthRole>
+            <ManageGroupCountryPage />
+          </AuthRole>
+        ),
       },
       {
         path: "/manage-category",
-        element: <ManageCategoryPage />,
+        element: (
+          <AuthRole>
+            <ManageCategoryPage />
+          </AuthRole>
+        ),
       },
       {
         path: "/manage-user",
-        element: <ManageUserPage />,
+        element: (
+          <AuthUnit>
+            <ManageUserPage />
+          </AuthUnit>
+        ),
       },
       {
         path: "/manage-country",
-        element: <ManageCountryPage />,
+        element: (
+          <AuthRole>
+            <ManageCountryPage />
+          </AuthRole>
+        ),
       },
       {
         path: "/clear_user_cache",

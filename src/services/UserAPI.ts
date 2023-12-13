@@ -2,7 +2,6 @@ import axios from "axios";
 import { Component } from "react";
 import { IUser } from "../interfaces/user.interface";
 import { IPagination, IRowReturn } from "../interfaces/row.interface";
-import { mockUsers } from "../mock/user.mock";
 
 class UserApi extends Component {
   static GetAll: (data: IPagination) => Promise<IRowReturn<IUser>> = async (
@@ -11,8 +10,8 @@ class UserApi extends Component {
     try {
       const result = await axios({
         url: "/user/findAll",
-        method: "post",
-        data: data,
+        method: "get",
+        params: data,
       });
 
       return result.data;
@@ -37,7 +36,7 @@ class UserApi extends Component {
   static Update: (data: IUser) => Promise<IUser> = async (data) => {
     try {
       const result = await axios({
-        url: "/user/update",
+        url: "/user/update/" + data.id,
         method: "put",
         data: data,
       });
@@ -50,7 +49,7 @@ class UserApi extends Component {
   static Delete: (id: number) => Promise<IUser> = async (id) => {
     try {
       const result = await axios({
-        url: "/user/" + id,
+        url: "/user/delete/" + id,
         method: "delete",
       });
 

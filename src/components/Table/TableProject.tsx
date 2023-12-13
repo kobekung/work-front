@@ -171,6 +171,16 @@ const TableProject = ({
       }),
     },
     {
+      title: "Unit",
+      dataIndex: "unitName",
+      key: "unitName",
+      ...getColumnSearchProps({
+        dataIndex: "unitName",
+        handleSearch,
+        handleReset,
+      }),
+    },
+    {
       title: "Active",
       dataIndex: "status",
       key: "status",

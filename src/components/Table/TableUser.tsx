@@ -8,6 +8,10 @@ import { alertConfirm, alertError, alertSuccess } from "../../utils/Alert";
 import { UserApi } from "../../services/UserAPI";
 import AddButton from "../Button/AddButton";
 import FormUser from "../Form/FormUser";
+import { mockRoles } from "../../mock/user.mock";
+import { useSelector } from "react-redux";
+import { initialState } from "../../redux/redux.store";
+import { ERole } from "../../enums/role.enum";
 
 const TableUser = ({
   data,
@@ -25,7 +29,9 @@ const TableUser = ({
   const [open, setOpen] = useState(false);
   const [dataSelected, setDataSelected] = useState<IUser | null>(null);
   const searchInput = useRef<InputRef>(null);
-
+  const user = useSelector<initialState>(
+    (state: initialState) => state.user
+  ) as IUser;
   const handleEdit = async (data: IUser) => {
     try {
       setDataSelected(data);
@@ -39,7 +45,7 @@ const TableUser = ({
     try {
       const confirm = await alertConfirm("Are you sure?", "Delete");
       if (!confirm) return;
-      await UserApi.Delete(data.Id!);
+      await UserApi.Delete(data.id!);
       getUser();
       alertSuccess();
     } catch (e: any) {
@@ -129,7 +135,7 @@ const TableUser = ({
     render: (text: string, record: IUser) => {
       // Custom rendering logic here
       return (
-        <div key={record.Id}>
+        <div key={record.id}>
           <p className="line-clamp-1">{text}</p>
         </div>
       );
@@ -152,19 +158,57 @@ const TableUser = ({
   const columns: any = [
     {
       title: "Id",
-      dataIndex: "Id",
-      key: "Id",
-      ...getColumnSearchProps({ dataIndex: "Id", handleSearch, handleReset }),
+      dataIndex: "id",
+      key: "id",
+      ...getColumnSearchProps({ dataIndex: "id", handleSearch, handleReset }),
     },
     {
-      title: "Username",
-      dataIndex: "Username",
-      key: "Username",
+      title: "firstname",
+      dataIndex: "firstname",
+      key: "firstname",
       ...getColumnSearchProps({
-        dataIndex: "Username",
+        dataIndex: "firstname",
         handleSearch,
         handleReset,
       }),
+    },
+    {
+      title: "lastname",
+      dataIndex: "lastname",
+      key: "lastname",
+      ...getColumnSearchProps({
+        dataIndex: "lastname",
+        handleSearch,
+        handleReset,
+      }),
+    },
+    {
+      title: "Unit",
+      dataIndex: "biogUnitname",
+      key: "biogUnitname",
+      ...getColumnSearchProps({
+        dataIndex: "biogUnitname",
+        handleSearch,
+        handleReset,
+      }),
+    },
+    {
+      title: "Role",
+      dataIndex: "Role",
+      key: "Role",
+      render: (_: number, row: IUser) => {
+        return (
+          <div key={`active-${row.id}`}>
+            <p>
+              {
+                mockRoles.find((e) => {
+                  return e.Id == row.roleId;
+                })?.Name
+              }
+            </p>
+          </div>
+        );
+      },
     },
     {
       title: "Active",
@@ -172,7 +216,7 @@ const TableUser = ({
       key: "status",
       render: (_: number, row: IUser) => {
         return (
-          <div key={`active-${row.Id}`}>
+          <div key={`active-${row.id}`}>
             <Tag color={row.status ? "green" : "volcano"}>
               {row.status ? "Connect" : "Disable"}
             </Tag>
@@ -185,19 +229,25 @@ const TableUser = ({
       dataIndex: "Id",
       key: "Id",
       render: (_: number, data: IUser) => (
-        <div className="flex gap-5" key={`actions-${data.Id}`}>
-          <div
-            className="cursor-pointer text-xl text-amber-500"
-            onClick={() => handleEdit(data)}
-          >
-            <FaEdit />
-          </div>
-          <div
-            className="cursor-pointer text-xl text-red-500"
-            onClick={() => handleDelete(data)}
-          >
-            <FaTrashAlt />
-          </div>
+        <div className="flex gap-5" key={`actions-${data.id}`}>
+          {user.roleId == ERole.ADMIN || user.biogUnit == data.biogUnit ? (
+            <>
+              <div
+                className="cursor-pointer text-xl text-amber-500"
+                onClick={() => handleEdit(data)}
+              >
+                <FaEdit />
+              </div>
+              <div
+                className="cursor-pointer text-xl text-red-500"
+                onClick={() => handleDelete(data)}
+              >
+                <FaTrashAlt />
+              </div>
+            </>
+          ) : (
+            <></>
+          )}
         </div>
       ),
     },

@@ -4,8 +4,15 @@ import { IRowReturn } from "../interfaces/row.interface";
 import { IProject } from "../interfaces/project.interface";
 import { ProjectApi } from "../services/ProjectAPI";
 import TableProject from "../components/Table/TableProject";
+import { useSelector } from "react-redux";
+import { initialState } from "../redux/redux.store";
+import { IUser } from "../interfaces/user.interface";
+import { ERole } from "../enums/role.enum";
 
 const ProjectPage = () => {
+  const user = useSelector<initialState>(
+    (state: initialState) => state.user
+  ) as IUser;
   const [projects, setProjects] = useState<IRowReturn<IProject> | null>();
   const [page, setPage] = useState<number>(1);
   const [row, setRow] = useState<number>(10);
@@ -13,6 +20,9 @@ const ProjectPage = () => {
     // eslint-disable-next-line no-useless-catch
     try {
       const result = await ProjectApi.GetAll({
+        search: `${
+          user.roleId != ERole.ADMIN ? `unitId:${user.biogUnit}` : ""
+        }`,
         page: page,
         limit: row,
       });

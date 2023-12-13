@@ -1,12 +1,19 @@
 import axios from "axios";
 import { Component } from "react";
+import { IUser } from "../interfaces/user.interface";
 
-class UserApi extends Component {
-  static Search: (data: string) => Promise<any> = async (data: string) => {
+interface RdpApiInterface {
+  name: string;
+  token: string;
+}
+class RdpApi extends Component {
+  static Search: (data: RdpApiInterface) => Promise<IUser[]> = async (
+    data: RdpApiInterface
+  ) => {
     try {
       const result = await axios({
         url: "/rdp/search-person-by-name",
-        method: "get",
+        method: "post",
         data: data,
       });
 
@@ -17,4 +24,4 @@ class UserApi extends Component {
   };
 }
 
-export { UserApi };
+export { RdpApi };

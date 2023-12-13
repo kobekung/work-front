@@ -9,6 +9,9 @@ import InputComponent from "../Input/InputComponent";
 import { IProject } from "../../interfaces/project.interface";
 import { ProjectApi } from "../../services/ProjectAPI";
 import { INPUT_TYPE_ENUM } from "../../enums/input.enum";
+import { useSelector } from "react-redux";
+import { initialState } from "../../redux/redux.store";
+import { IUser } from "../../interfaces/user.interface";
 
 interface IProp {
   data: IProject | null;
@@ -18,6 +21,9 @@ interface IProp {
 }
 
 const FormProject = ({ data, open, setOpen, refreshTable }: IProp) => {
+  const user = useSelector<initialState>(
+    (state: initialState) => state.user
+  ) as IUser;
   const {
     register,
     handleSubmit,
@@ -28,6 +34,9 @@ const FormProject = ({ data, open, setOpen, refreshTable }: IProp) => {
   const onSubmit = async (payload: IProject) => {
     try {
       if (_.isEmpty(data) || _.isNil(data)) {
+       
+        payload.unitId = Number(user.biogUnit);
+        payload.unitName = user.biogUnitname;
         await ProjectApi.Create(payload);
       } else {
         console.log(data);
@@ -43,6 +52,7 @@ const FormProject = ({ data, open, setOpen, refreshTable }: IProp) => {
   };
 
   useEffect(() => {
+    console.log(user)
     if (data) {
       reset(data ?? {});
     } else {
@@ -68,7 +78,7 @@ const FormProject = ({ data, open, setOpen, refreshTable }: IProp) => {
               }}
             />
             <InputComponent
-              label={"Budget"}    
+              label={"Budget"}
               type={INPUT_TYPE_ENUM.NUMBER}
               register={{
                 ...register("budget", { required: "Please Enter Data." }),

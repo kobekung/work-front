@@ -6,12 +6,13 @@ import { IRole, IUser } from "../../interfaces/user.interface";
 import { UserApi } from "../../services/UserAPI";
 import { alertError, alertSuccess } from "../../utils/Alert";
 import CustomDialog from "../Dialog/CustomDialog";
-import { INPUT_TYPE_ENUM } from "../../enums/input.enum";
 import { mockRoles } from "../../mock/user.mock";
-import ToggleSwitch from "../Input/ToggleSwitch";
 import ComboboxInput from "../Input/ComboboxInput";
-import InputComponent from "../Input/InputComponent";
 import ComboboxBase from "../Input/ComboboxBase";
+import { RdpApi } from "../../services/RdpAPI";
+import { initialState } from "../../redux/redux.store";
+import { useSelector } from "react-redux";
+import ComboboxUser from "../Input/ComboboxUser";
 
 interface IProp {
   data: IUser | null;
@@ -21,22 +22,38 @@ interface IProp {
 }
 
 const FormUser = ({ data, open, setOpen, getUser }: IProp) => {
+  const user: any = useSelector<initialState>(
+    (state: initialState) => state.user
+  );
   const [search, setSearch] = useState<string>("");
   const [users, setUsers] = useState<any[]>([]);
   const {
-    register,
     handleSubmit,
     formState: { errors },
     control,
     reset,
-  } = useForm<{ username: string; roleId: number }>();
-  const onSubmit = async (payload: { username: string; roleId: number }) => {
+  } = useForm<{ user: IUser; roleId: number }>();
+  const onSubmit = async (payload: { user: IUser; roleId: number }) => {
     try {
-      // if (_.isEmpty(data) || _.isNil(data)) {
-      //   await UserApi.Create(payload);
-      // } else {
-      //   await UserApi.Update({ ...data, ...payload });
-      // }
+      if (_.isEmpty(data) || _.isNil(data)) {
+        const newPayload = {
+          firstname: payload.user.biogName?.split("  ")[0] ?? "",
+          lastname: payload.user.biogName?.split("  ")[1] ?? "",
+          roleId: payload.roleId,
+          biogIdp: payload.user.biogIdp,
+          biogId: payload.user.biogId,
+          unitId: payload.user.biogUnit,
+          biogUnit: payload.user.biogUnit,
+          biogUnitname: payload.user.biogUnitname,
+          email: payload.user.biogName,
+        } as IUser;
+        await UserApi.Create(newPayload);
+      } else {
+        await UserApi.Update({
+          roleId: payload.roleId,
+          id: data.id,
+        });
+      }
       setOpen(false);
       getUser();
       alertSuccess();
@@ -48,12 +65,11 @@ const FormUser = ({ data, open, setOpen, getUser }: IProp) => {
 
   const searchUser = async () => {
     try {
-      const result = await UserApi.GetAll({
-        limit: 100,
-        page: 1,
-        search: search,
+      const result = await RdpApi.Search({
+        name: search,
+        token: user.token,
       });
-      setUsers(result.data);
+      setUsers(result);
     } catch (e) {
       throw e;
     }
@@ -63,11 +79,13 @@ const FormUser = ({ data, open, setOpen, getUser }: IProp) => {
     if (data) {
       reset(data ?? {});
     } else {
-      reset({ username: undefined });
+      reset({ user: undefined });
     }
   }, [data, setOpen]);
 
-  useEffect(() => {}, [search]);
+  useEffect(() => {
+    if (search.length > 0) searchUser();
+  }, [search]);
 
   return (
     <div>
@@ -80,26 +98,38 @@ const FormUser = ({ data, open, setOpen, getUser }: IProp) => {
       >
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col gap-2">
-            <Controller
-              name={"username"}
-              rules={{ required: "please select data" }}
-              control={control}
-              render={({ field: { onChange, value } }) => {
-                return (
-                  <ComboboxBase
-                    onSearchChange={(e) => {
-                      setSearch(e);
-                    }}
-                    disable={false}
-                    dataset={users ?? []}
-                    defaultValue={value}
-                    onChange={(e) => {
-                      console.log(e);
-                    }}
-                  />
-                );
-              }}
-            />
+            {data ? (
+              ""
+            ) : (
+              <Controller
+                name={"user"}
+                rules={{ required: "please select data" }}
+                control={control}
+                render={({ field: { onChange, value } }) => {
+                  return (
+                    <ComboboxUser
+                      onSearchChange={(e) => {
+                        setSearch(e);
+                      }}
+                      disable={false}
+                      dataset={
+                        users.map((e) => {
+                          return {
+                            id: e.biogIdp,
+                            name: e.biogName,
+                            value: e,
+                            unavailable: false,
+                          };
+                        }) ?? []
+                      }
+                      onChange={(e) => {
+                        onChange(e);
+                      }}
+                    />
+                  );
+                }}
+              />
+            )}
 
             <ComboboxInput
               errors={errors.roleId?.message}

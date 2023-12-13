@@ -1,6 +1,7 @@
 import { useState } from "react";
 import myImage from "../../public/logo.png";
 import { IoMdClose, IoMdLogOut } from "react-icons/io";
+import { IoNewspaper } from "react-icons/io5";
 import { AiFillPieChart, AiFillSetting } from "react-icons/ai";
 import { BiCategoryAlt } from "react-icons/bi";
 import { Link } from "react-router-dom";
@@ -12,6 +13,10 @@ import {
 } from "react-icons/fa";
 import { GiFlyingFlag } from "react-icons/gi";
 import { Logout } from "../utils/Logout";
+import { useSelector } from "react-redux";
+import { IUser } from "../interfaces/user.interface";
+import { initialState } from "../redux/redux.store";
+import { ERole } from "../enums/role.enum";
 
 interface IMenu {
   Path?: string;
@@ -21,10 +26,14 @@ interface IMenu {
     Path: string;
     Icon: React.ReactNode;
     Name: string;
+    Role?: ERole[];
   }>;
 }
 
 const SideBar = ({ element }: { element: JSX.Element }) => {
+  const user = useSelector<initialState>(
+    (state: initialState) => state.user
+  ) as IUser;
   const [isOpen, setIsOpen] = useState(true);
   const [submenuOpen, setSubmenuOpen] = useState<Record<string, boolean>>({});
   const toggleSidebar = () => {
@@ -45,7 +54,7 @@ const SideBar = ({ element }: { element: JSX.Element }) => {
     },
     {
       Path: "/project",
-      Icon: <AiFillPieChart />,
+      Icon: <IoNewspaper  />,
       Name: "Project",
     },
     {
@@ -56,21 +65,25 @@ const SideBar = ({ element }: { element: JSX.Element }) => {
           Path: "/manage-category",
           Icon: <BiCategoryAlt />,
           Name: "Category",
+          Role: [ERole.ADMIN],
         },
         {
           Path: "/manage-group-country",
           Icon: <FaLayerGroup />,
           Name: "Group Country",
+          Role: [ERole.ADMIN],
         },
         {
           Path: "/manage-country",
           Icon: <GiFlyingFlag />,
           Name: "Country",
+          Role: [ERole.ADMIN],
         },
         {
           Path: "/manage-user",
           Icon: <FaUsers />,
           Name: "Manage User",
+          Role: [ERole.ADMIN, ERole.UNIT_ADMIN],
         },
       ],
     },
@@ -109,8 +122,8 @@ const SideBar = ({ element }: { element: JSX.Element }) => {
             <div className="flex items-center justify-between">
               <div className="flex items-center pl-2.5 mb-5">
                 <img src={myImage} className="h-10 mr-3 sm:h-12" />
-                <p className="self-center text-xl font-semibold whitespace-nowrap text-white">
-                  Watchdog
+                <p className="self-center text-xl font-semibold whitespace-nowrap text-white uppercase">
+                J6 proposal 
                 </p>
               </div>
               <p className="sm:hidden mb-5">
@@ -123,6 +136,7 @@ const SideBar = ({ element }: { element: JSX.Element }) => {
 
             <ul className="space-y-2 font-medium">
               {menu.map((e) => {
+                if (user.roleId == ERole.GUESS && e.Name == "Setting") return;
                 return (
                   <li key={e.Name}>
                     <Link
@@ -154,19 +168,23 @@ const SideBar = ({ element }: { element: JSX.Element }) => {
                     {/* Submenu */}
                     {e.Children && submenuOpen[e.Name] && (
                       <ul className="ml-6 space-y-2">
-                        {e.Children.map((child) => (
-                          <li key={child.Name}>
-                            <Link
-                              to={child.Path}
-                              className="flex items-center p-2 text-gray-900 rounded-lg text-white hover:bg-gray-700 group"
-                            >
-                              <div className="text-2xl flex items-center p-2 text-gray-900 rounded-lg text-white hover:bg-gray-700 group">
-                                {child.Icon}
-                              </div>
-                              <span className="ml-3">{child.Name}</span>
-                            </Link>
-                          </li>
-                        ))}
+                        {e.Children.map((child) => {
+                          return child.Role?.includes(user.roleId) ? (
+                            <li key={child.Name}>
+                              <Link
+                                to={child.Path}
+                                className="flex items-center p-2 text-gray-900 rounded-lg text-white hover:bg-gray-700 group"
+                              >
+                                <div className="text-2xl flex items-center p-2 text-gray-900 rounded-lg text-white hover:bg-gray-700 group">
+                                  {child.Icon}
+                                </div>
+                                <span className="ml-3">{child.Name}</span>
+                              </Link>
+                            </li>
+                          ) : (
+                            ""
+                          );
+                        })}
                       </ul>
                     )}
                   </li>
