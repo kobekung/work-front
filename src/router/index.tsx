@@ -5,10 +5,10 @@ import NotFoundPage from "../pages/NotFoundPage";
 import ClearcachePage from "../pages/ClearcachePage";
 import ManageUserPage from "../pages/ManageUserPage";
 import ManageCountryPage from "../pages/ManageCountry";
-import ManageCountryGroupPage from "../pages/ManageCountryGroupPage";
 import ProjectPage from "../pages/ProjectPage";
 import ProductPage from "../pages/ProductPage";
 import ManageCategoryPage from "../pages/ManageCategoryPage";
+import ManageGroupCountry from "../pages/ManageGroupCountry";
 
 export const router = createBrowserRouter([
   {
@@ -30,7 +30,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/manage-group-country",
-        element: <ManageCountryGroupPage />,
+        element: <ManageGroupCountry />,
       },
       {
         path: "/manage-category",
