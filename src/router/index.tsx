@@ -8,7 +8,11 @@ import ManageCountryPage from "../pages/ManageCountry";
 import ManageCountryGroupPage from "../pages/ManageCountryGroupPage";
 import ProjectPage from "../pages/ProjectPage";
 import ProductPage from "../pages/ProductPage";
+<<<<<<< Updated upstream
 import ManageCategoryPage from "../pages/ManageCategoryPage";
+=======
+import DashboardPage from "../pages/DashboardPage";
+>>>>>>> Stashed changes
 
 export const router = createBrowserRouter([
   {
@@ -20,6 +24,10 @@ export const router = createBrowserRouter([
     path: "/",
     element: <MainTemplate />,
     children: [
+      {
+        path: "/dashboard",
+        element: <DashboardPage />,
+      },
       {
         path: "/project",
         element: <ProjectPage />,
