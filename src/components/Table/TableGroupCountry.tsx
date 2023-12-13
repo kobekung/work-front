@@ -7,8 +7,8 @@ import { alertConfirm, alertError, alertSuccess } from "../../utils/Alert";
 import { UserApi } from "../../services/UserAPI";
 import AddButton from "../Button/AddButton";
 import FormGroupCountry from "../Form/FormGroupCountry";
-import { CountryApi } from "../../services/CountryAPI";
 import { ICountryGroup } from "../../interfaces/groupContry.interface";
+import { GroupCountryApi } from "../../services/GroupCountryAPI ";
 
 const TableGroupCountry = ({
   data,
@@ -40,7 +40,7 @@ const TableGroupCountry = ({
     try {
       const confirm = await alertConfirm("Are you sure?", "Delete");
       if (!confirm) return;
-      await CountryApi.Delete(data.id!);
+      await GroupCountryApi.Delete(data.id!);
       refreshTable();
       alertSuccess();
     } catch (e: any) {

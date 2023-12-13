@@ -7,9 +7,8 @@ import CustomDialog from "../Dialog/CustomDialog";
 import ToggleSwitch from "../Input/ToggleSwitch";
 import InputComponent from "../Input/InputComponent";
 
-import { CountryApi } from "../../services/CountryAPI";
-
 import { ICountryGroup } from "../../interfaces/groupContry.interface";
+import { GroupCountryApi } from "../../services/GroupCountryAPI ";
 
 interface IProp {
   data: ICountryGroup | null;
@@ -29,10 +28,10 @@ const FormGroupCountry = ({ data, open, setOpen, refreshTable }: IProp) => {
   const onSubmit = async (payload: ICountryGroup) => {
     try {
       if (_.isEmpty(data) || _.isNil(data)) {
-        await CountryApi.Create(payload);
+        await GroupCountryApi.Create(payload);
       } else {
         console.log(data);
-        await CountryApi.Update({ ...data, ...payload });
+        await GroupCountryApi.Update({ ...data, ...payload });
       }
       setOpen(false);
       refreshTable();
