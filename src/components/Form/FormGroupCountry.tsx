@@ -26,6 +26,7 @@ const FormGroupCountry = ({ data, open, setOpen, refreshTable }: IProp) => {
     reset,
   } = useForm<ICountryGroup>();
   const onSubmit = async (payload: ICountryGroup) => {
+    console.log(payload);
     try {
       if (_.isEmpty(data) || _.isNil(data)) {
         await GroupCountryApi.Create(payload);

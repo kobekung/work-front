@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import PageHeader from "../components/PageHeader";
 import { IRowReturn } from "../interfaces/row.interface";
-import { CountryApi } from "../services/CountryAPI";
+
 import TableGroupCountry from "../components/Table/TableGroupCountry";
 import { ICountryGroup } from "../interfaces/groupContry.interface";
+import { GroupCountryApi } from "../services/GroupCountryAPI ";
 
 const ManageGroupCountryPage = () => {
   const [page, setPage] = useState<number>(1);
@@ -13,7 +14,7 @@ const ManageGroupCountryPage = () => {
 
   const getCountry = async () => {
     try {
-      const result = await CountryApi.GetAll({
+      const result = await GroupCountryApi.GetAll({
         page: page,
         limit: row,
       });

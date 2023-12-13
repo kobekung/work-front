@@ -9,7 +9,7 @@ class GroupCountryApi extends Component {
     async (data: IPagination) => {
       try {
         const result = await axios({
-          url: "/country/findAll",
+          url: "/country-group/findAll",
           method: "get",
           params: data,
         });
@@ -24,7 +24,7 @@ class GroupCountryApi extends Component {
   ) => {
     try {
       const result = await axios({
-        url: "/country/create",
+        url: "/country-group/create",
         method: "post",
         data: data,
       });
@@ -39,7 +39,7 @@ class GroupCountryApi extends Component {
   ) => {
     try {
       const result = await axios({
-        url: "/country/update",
+        url: "/country-group/update",
         method: "put",
         data: data,
       });
@@ -51,7 +51,7 @@ class GroupCountryApi extends Component {
   static Delete: (id: number) => Promise<ICountryGroup> = async (id) => {
     try {
       const result = await axios({
-        url: "/country/delete/" + id,
+        url: "/country-group/delete/" + id,
         method: "delete",
       });
 
